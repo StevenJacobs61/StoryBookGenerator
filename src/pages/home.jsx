@@ -51,8 +51,8 @@ const Home = () => {
       prompt: storyRes,
       model: 'text-davinci-003',
       n: 1,
-      max_tokens: 1000,
-      temperature: 0.1,
+      max_tokens: 3700,
+      temperature: 0.2,
     }, {
       headers: {
         'Content-Type': 'application/json',
