@@ -42,7 +42,7 @@ const Home = () => {
 
  const handleSubmit = async (e) => {
   e.preventDefault();
-  setLoading(true)
+  setLoading(true);
   setStory("Loading .")
   try{
     const storyRes = await genStory({charTraits, storyDetails});
