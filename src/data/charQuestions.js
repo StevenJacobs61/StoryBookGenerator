@@ -1,43 +1,38 @@
 const characterQuestions = [
     {
         question: "What is your character's name",
-        label: "... or nickname",
+        label: "or nickname",
         ref: "name"
     },
     {
         question: "What is your character's age",
-        label: "... in years",
+        label: "in years",
         ref: "age"
     },
     {
-        question: "What is your character's gender",
-        label: '... male, female, something else',
+        question: "What is your character's pronouns",
+        label: 'e.g. she/her, he/him, they/them etc..',
         ref: "gender"
     },
     {
         question: "What is your character's hair color",
-        label: "... brown, blonde, black...",
+        label: "e.g brown, blonde, black..",
         ref: "hairColor"
     },
     {
         question: "What is your character's eye color",
-        label: '... blue, green, purple...',
+        label: 'e.g. blue, green, purple etc..',
         ref: "eyeColor"
     },
     {
         question: "What is your character's height",
-        label: '... tall, medium, short',
+        label: 'e.g. tall, medium, short',
         ref: "height"
     },
     {
-        question: "Where was your character born",
-        label: "... where are they from",
+        question: "Where was your character from",
+        label: "e.g. London, UK, or, Lagos, Nigeria etc..",
         ref: "born"
-    },
-    {
-        question: "Where does your character live now",
-        label: "... where do they live now",
-        ref: "lives"
     },
     {
         question: "Does your character have a special ability",

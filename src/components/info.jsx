@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemText, Typography } from '@mui/material'
 import React from 'react'
 
-const Info = ({charTraits}) => {
+const Info = ({data}) => {
     function formatCamelCase(camelCaseString) {
         const formattedString = camelCaseString.replace(/([A-Z])/g, ' $1');
         return formattedString.charAt(0).toUpperCase() + formattedString.slice(1);
@@ -18,9 +18,9 @@ const Info = ({charTraits}) => {
     <div>
         <Typography variant='h6' sx={style.hdr}>Your Character's traits</Typography>
         <List>
-            {Object.keys(charTraits).map((key, index) => 
+            {Object.keys(data).map((key, index) => 
             <ListItem key={index}>
-                <ListItemText primary={formatCamelCase(key)} secondary={charTraits[key]}/>
+                <ListItemText primary={formatCamelCase(key)} secondary={data[key]}/>
             </ListItem>
             )}
         </List>

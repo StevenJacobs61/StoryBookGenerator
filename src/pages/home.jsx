@@ -1,11 +1,12 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Typography, AppBar, Toolbar, Button } from '@mui/material'
-import CardComp from '../components/card'
 import { Container } from '@mui/system'
-import Info from '../components/info'
 import traits from "../data/charTraits"
 import genStory from '../data/story'
 import axios from 'axios'
+import Character from '../components/character'
+import Story from '../components/story'
+import details from '../data/storDetails'
 
 const Home = () => {
  const style = {
@@ -14,20 +15,38 @@ const Home = () => {
     p: '1rem 0'
   },
   main: {
-    padding: '70px 0 0'
+    padding: '70px 0 0',
   },
   button: { 
-    m: "0 0 1rem 0.5rem"
-  }
+    m: "0rem 0 1rem 1rem"
+  },
+  topButtons: {
+    m: "1rem 0.5rem 0"
+  },
  }
  const [charTraits, setCharTraits] = useState(traits)
- const [story, setStory] = useState("Story will generate here")
+ const [storyDetails, setStoryDetails] = useState(details)
+ const [story, setStory] = useState("Click submit to generate story here!")
+ const [loading, setLoading] = useState(false)
+ const [content, setContent] = useState(0)
+
+ useEffect(() => {
+  let dotsInterval;
+  if(loading){
+    dotsInterval = setInterval(() => {
+      setStory((prev) => prev === 'Loading ...' ? 'Loading .' : prev + ".")
+    }, 500)
+  }
+  return () => clearInterval(dotsInterval)
+ }, [loading])
 
  const handleSubmit = async (e) => {
   e.preventDefault();
-  setStory("loading...")
+  setLoading(true)
+  setStory("Loading .")
   try{
-    const storyRes = await genStory(charTraits);
+    const storyRes = await genStory({charTraits, storyDetails});
+    console.log(storyRes);
     const response = await axios.post('https://api.openai.com/v1/completions', {
       prompt: storyRes,
       model: 'text-davinci-003',
@@ -37,47 +56,66 @@ const Home = () => {
     }, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer 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`,
+        'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
       },
     });
-    console.log(response);
     setStory(response.data.choices[0].text);
-    console.log(story);
-
   }catch(err){
     console.log(err);
+  } finally {
+    setLoading(false)
   }
 };
- 
   return (
     <>
-    <AppBar>
+    <header>
+      <AppBar>
       <Toolbar 
       sx={style.toolbar}
       variant='h1'>
-      <Typography>
+        <Typography>
         Story Book Generator
-      </Typography>
+        </Typography>
       </Toolbar>
-    </AppBar>
+      </AppBar>
+    </header>
+
+  
     <main style={style.main}>
       <Typography 
       variant='h5'
       component='h1'
       align='center'
       gutterBottom>
-        Fill in the questionaire to start creating your custom AI story!
+        Fill in the Character and Story questionaires and press submit to create your custom AI story!
       </Typography>
+      <div style={style.container}>
       <Container>
-        <CardComp 
-        setCharTraits={setCharTraits}
-        charTraits={charTraits}
-        />
+      <Button 
+      onClick={() => setContent(0)}
+      sx={style.topButtons} 
+      variant='outlined'>
+        Character</Button>
+      <Button 
+      onClick={() => setContent(1)}
+      sx={style.topButtons} 
+      color='success' 
+      variant='outlined'>
+        Story</Button>
       </Container>
+      </div>
+
       <Container>
-        <Info
-        charTraits={charTraits}/>
-      </Container>
+        {content === 0 ?
+        <Character
+        setData={setCharTraits}
+        data={charTraits}/>
+        : <Story
+        setData={setStoryDetails}
+        data={storyDetails}/>
+        }
+      </Container>  
+
       <Container>
        <Button 
        variant='contained' 
@@ -86,8 +124,9 @@ const Home = () => {
           Submit
        </Button>
       </Container>
+
       <Container>
-        <Typography>
+        <Typography gutterBottom>
           {story}
         </Typography>
       </Container>
