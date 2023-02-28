@@ -16,7 +16,9 @@ const Info = ({data, submit, setCount, content}) => {
         },
         card: {
           width: 'fit-content',
-          m: '1.5rem 0'
+          m: '1.5rem 0',
+          maxHeight: '500px',
+          overflowY: 'scroll'
         },
         listItem: {
           cursor: 'pointer'
