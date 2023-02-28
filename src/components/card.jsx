@@ -1,11 +1,11 @@
 
 import { Button, Card, CardActions, CardContent, CardHeader, Input } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import characterQuestions from '../data/charQuestions'
 import storyQuestions from '../data/storQuestions'
 
 
-const CardComp = ({setData, data, content}) => {
+const CardComp = ({setData, data, content, count, setCount}) => {
     const style = {
         card: {
             maxWidth: 'max-content',
@@ -21,33 +21,33 @@ const CardComp = ({setData, data, content}) => {
     }
     const [questions, setQuestiions] = useState(() => content === 0 ? characterQuestions : storyQuestions)
 
-    const [count, setCount] = useState(0)
     const [keys, setKeys] = useState(Object.keys(data))
     const [answer, setAnswer] = useState('')
 
-    function handleClick(add){
-        if(add && count >= questions.length - 1){
-            setCount(0)
-        } else if(!add && count === 0) {
-            setCount(questions.length - 1)
-        }else if(add && count < questions.length - 1){
-            setCount(count + 1)
-        }
-        else{
-            if(count < 1) return;
-            else{
-                setCount(count - 1)
-            }
-        }}
-    
-        function handleSubmit(e){
-            e.preventDefault()
-            const updatedData = { ...data };
-            updatedData[keys[count]] = answer;
-            setData(updatedData);
-            setAnswer('')
-          }
+    useEffect(() =>{
+        setQuestiions(()=> content === 0 ? characterQuestions : storyQuestions)
+    }, [content])
+    useEffect(() => {
+        setKeys(Object.keys(data));
+      }, [data]);
 
+      function handleClick(add) {
+        const newIndex = add ? count + 1 : count - 1;
+        const lastQuestionIndex = questions.length - 1;
+        const newCount = newIndex < 0 ? lastQuestionIndex : newIndex % (lastQuestionIndex + 1);
+        setCount(newCount);
+      }
+      
+    
+        function handleSubmit(e) {
+            e.preventDefault();
+            const currentKey = keys[count];
+            const updatedData = { ...data };
+            updatedData[currentKey] = answer;
+            setData(updatedData);
+            setAnswer('');
+          }
+          
   return (
     <div style={style.container}>
     <Card sx={style.card}>
@@ -60,7 +60,7 @@ const CardComp = ({setData, data, content}) => {
         <CardActions sx={style.actions}>
             <Button 
             color='secondary'
-            onClick={()=>handleClick(false)}
+            onClick={()=>{handleClick(false); setAnswer('')}}
             >Back
             </Button>
             <Button
@@ -68,7 +68,7 @@ const CardComp = ({setData, data, content}) => {
             onClick={(e)=>{handleClick(true); handleSubmit(e)}}
             >Submit</Button>
             <Button
-            onClick={()=>handleClick(true)}
+            onClick={()=>{handleClick(true); setAnswer('')}}
             >Next
             </Button>
         </CardActions>

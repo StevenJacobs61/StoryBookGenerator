@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import {Typography, AppBar, Toolbar, Button } from '@mui/material'
+import {Typography, AppBar, Toolbar, Button, Box, Paper } from '@mui/material'
 import { Container } from '@mui/system'
 import traits from "../data/charTraits"
 import genStory from '../data/story'
 import axios from 'axios'
-import Character from '../components/character'
-import Story from '../components/story'
+import Content from '../components/content'
 import details from '../data/storDetails'
 
 const Home = () => {
@@ -15,14 +14,22 @@ const Home = () => {
     p: '1rem 0'
   },
   main: {
-    padding: '70px 0 0',
+    padding: '70px 20px 0',
+    width: '100%'
   },
   button: { 
     m: "0rem 0 1rem 1rem"
   },
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   topButtons: {
     m: "1rem 0.5rem 0"
   },
+  story: {
+    p: '1rem'
+  }
  }
  const [charTraits, setCharTraits] = useState(traits)
  const [storyDetails, setStoryDetails] = useState(details)
@@ -40,13 +47,13 @@ const Home = () => {
   return () => clearInterval(dotsInterval)
  }, [loading])
 
+
  const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
   setStory("Loading .")
   try{
     const storyRes = await genStory({charTraits, storyDetails});
-    console.log(storyRes);
     const response = await axios.post('https://api.openai.com/v1/completions', {
       prompt: storyRes,
       model: 'text-davinci-003',
@@ -82,6 +89,7 @@ const Home = () => {
 
   
     <main style={style.main}>
+      <Box>
       <Typography 
       variant='h5'
       component='h1'
@@ -89,8 +97,9 @@ const Home = () => {
       gutterBottom>
         Fill in the Character and Story questionaires and press submit to create your custom AI story!
       </Typography>
-      <div style={style.container}>
-      <Container>
+      </Box>
+
+      <Container sx={style.container}>
       <Button 
       onClick={() => setContent(0)}
       sx={style.topButtons} 
@@ -103,33 +112,30 @@ const Home = () => {
       variant='outlined'>
         Story</Button>
       </Container>
-      </div>
 
-      <Container>
+      <Box>
         {content === 0 ?
-        <Character
+        <Content
         setData={setCharTraits}
-        data={charTraits}/>
-        : <Story
+        data={charTraits}
+        submit={handleSubmit}
+        content={content}
+        />
+        : <Content
         setData={setStoryDetails}
-        data={storyDetails}/>
+        data={storyDetails}
+        submit={handleSubmit}
+        content={content}
+        />
         }
-      </Container>  
-
-      <Container>
-       <Button 
-       variant='contained' 
-       sx={style.button}
-       onClick={(e) =>handleSubmit(e)}>
-          Submit
-       </Button>
-      </Container>
-
-      <Container>
+      </Box> 
+        <Box>
+      <Paper sx={style.story}>
         <Typography gutterBottom>
           {story}
         </Typography>
-      </Container>
+      </Paper>
+        </Box>
     </main>
     </>
   )
