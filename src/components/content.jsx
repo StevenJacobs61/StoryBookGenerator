@@ -3,10 +3,11 @@ import Info from './info'
 import CardComp from './card'
 import { Box } from '@mui/material'
 
-const Content = ({data, setData, submit, content}) => {
+const Content = ({data, setData, content}) => {
 const style = {
   container: {
     m: '0 1rem 1rem',
+    flex: '1'
   },
   box: {
     display: 'flex',
@@ -23,8 +24,10 @@ const style = {
 const [count, setCount] = useState(0)
 
 useEffect(() => {
-  setCount(0)
+  setCount(0);
  }, [content])
+
+
 
   return (
     <Box sx={style.box} >
@@ -41,7 +44,6 @@ useEffect(() => {
     <Info
     data={data}
     content={content}
-    submit={submit}
     setCount={setCount}/>
   </Box>
     </Box>

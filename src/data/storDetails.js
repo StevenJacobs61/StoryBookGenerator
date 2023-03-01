@@ -4,7 +4,7 @@ const details = {
     genre: '',
     plot: '',
     moral: '',
-    loaction: '',
+    location: '',
     extraStoryDetails: '',
 };
 

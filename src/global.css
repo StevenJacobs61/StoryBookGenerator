@@ -1,0 +1,22 @@
+@keyframes slideFromTop {
+    from {
+      top: -100px;
+      color: #797979
+    }
+    to {
+      top: 0;
+      color: #1939;
+    }
+  }
+  
+  @keyframes slideFromLeft {
+    from {
+      color: #797979;
+      left: -100px;
+    }
+    to {
+      left: 0;
+      color: #1976d2;
+    }
+  }
+

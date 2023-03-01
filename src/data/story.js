@@ -33,8 +33,7 @@ const genStory = ({charTraits, storyDetails }) => {
    as well as age appropriateness for content. Genre of the story: ${genre}. 
    General Plot Line of the story: ${plot}. Moral of the story: ${moral}, make sure the story
    is such that it teaches this moral. Location of the story: ${location}.
-    Extra Story-Details: ${extraStoryDetails}. `
+    Extra Story-Details: ${extraStoryDetails}. P.S DO NOT LIST THESE DETAILS AT THE START OF THE STORY, JUST START WITH THE STORY ITSELF!`
   )
 }
-
 export default genStory

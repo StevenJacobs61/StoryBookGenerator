@@ -2,10 +2,11 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import characterQuestions from '../data/charQuestions'
+import traits from '../data/charTraits'
 import storyQuestions from '../data/storQuestions'
 
 
-const CardComp = ({setData, data, content, count, setCount}) => {
+const CardComp = ({content, count, setCount, data, setData}) => {
     const style = {
         card: {
             maxWidth: 'max-content',
@@ -45,6 +46,7 @@ const CardComp = ({setData, data, content, count, setCount}) => {
             const updatedData = { ...data };
             updatedData[currentKey] = answer;
             setData(updatedData);
+            traits[keys[count]] = answer;
             setAnswer('');
           }
           
@@ -55,7 +57,14 @@ const CardComp = ({setData, data, content, count, setCount}) => {
         title={questions[count].question+'?'}
         subheader={questions[count].label}/>
         <CardContent>
-            <Input onChange={(e)=>setAnswer(e.target.value)} value={answer}/>
+            <Input 
+            onChange={(e)=>setAnswer(e.target.value)} value={answer}
+            onKeyDown={((e) => {
+                if(e.key === 'Enter'){
+                    handleSubmit(e);
+                    handleClick(true)
+                }
+            })}/>
         </CardContent>
         <CardActions sx={style.actions}>
             <Button 
